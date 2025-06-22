@@ -215,11 +215,13 @@ def get_trainer_configs(
     layer: str,
     submodule_name: str,
     steps: int,
+    target_l0s: list[int] = None,
     warmup_steps: int = WARMUP_STEPS,
     sparsity_warmup_steps: int = SPARSITY_WARMUP_STEPS,
     decay_start_fraction=DECAY_START_FRACTION,
 ) -> list[dict]:
     decay_start = int(steps * decay_start_fraction)
+    target_l0s = target_l0s or TARGET_L0s
 
     trainer_configs = []
 
@@ -303,7 +305,7 @@ def get_trainer_configs(
 
     if TrainerType.TOP_K.value in architectures:
         for seed, dict_size, learning_rate, k in itertools.product(
-            seeds, dict_sizes, learning_rates, TARGET_L0s
+            seeds, dict_sizes, learning_rates, target_l0s
         ):
             config = TopKTrainerConfig(
                 **base_config,
@@ -319,7 +321,7 @@ def get_trainer_configs(
 
     if TrainerType.BATCH_TOP_K.value in architectures:
         for seed, dict_size, learning_rate, k in itertools.product(
-            seeds, dict_sizes, learning_rates, TARGET_L0s
+            seeds, dict_sizes, learning_rates, target_l0s
         ):
             config = TopKTrainerConfig(
                 **base_config,
@@ -335,7 +337,7 @@ def get_trainer_configs(
 
     if TrainerType.Matryoshka_BATCH_TOP_K.value in architectures:
         for seed, dict_size, learning_rate, k in itertools.product(
-            seeds, dict_sizes, learning_rates, TARGET_L0s
+            seeds, dict_sizes, learning_rates, target_l0s
         ):
             config = MatryoshkaBatchTopKTrainerConfig(
                 **base_config,
@@ -351,7 +353,7 @@ def get_trainer_configs(
 
     if TrainerType.JUMP_RELU.value in architectures:
         for seed, dict_size, learning_rate, target_l0 in itertools.product(
-            seeds, dict_sizes, learning_rates, TARGET_L0s
+            seeds, dict_sizes, learning_rates, target_l0s
         ):
             config = JumpReluTrainerConfig(
                 **base_config,

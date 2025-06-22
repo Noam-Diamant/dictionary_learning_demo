@@ -66,6 +66,12 @@ def get_args():
     parser.add_argument(
         "--mixed_dataset", action="store_true", help="use mixed dataset"
     )
+    parser.add_argument(
+        "--target_l0s", type=int, nargs="+", help="target L0 values"
+    )
+    parser.add_argument(
+        "--dictionary_widths", type=int, nargs="+", help="dictionary widths"
+    )
 
     args = parser.parse_args()
     return args
@@ -170,6 +176,7 @@ def run_sae_training(
         layer,
         submodule_name,
         steps,
+        target_l0s=args.target_l0s,
     )
 
     print(f"len trainer configs: {len(trainer_configs)}")
@@ -351,7 +358,7 @@ if __name__ == "__main__":
             architectures=args.architectures,
             num_tokens=demo_config.num_tokens,
             random_seeds=demo_config.random_seeds,
-            dictionary_widths=demo_config.dictionary_widths,
+            dictionary_widths=args.dictionary_widths or demo_config.dictionary_widths,
             learning_rates=demo_config.learning_rates,
             dry_run=args.dry_run,
             use_wandb=args.use_wandb,
