@@ -72,6 +72,9 @@ def get_args():
     parser.add_argument(
         "--dictionary_widths", type=int, nargs="+", help="dictionary widths"
     )
+    parser.add_argument(
+        "--num_tokens_m", type=int, default=50, help="number of tokens in millions to train on (e.g. 500 for 500M tokens)"
+    )
 
     args = parser.parse_args()
     return args
@@ -193,7 +196,7 @@ def run_sae_training(
             save_steps=save_steps,
             save_dir=save_dir,
             log_steps=log_steps,
-            wandb_project=demo_config.wandb_project,
+            wandb_project=demo_config.get_wandb_project(model_name),
             normalize_activations=True,
             verbose=False,
             autocast_dtype=t.bfloat16,
@@ -356,7 +359,7 @@ if __name__ == "__main__":
             save_dir=save_dir,
             device=args.device,
             architectures=args.architectures,
-            num_tokens=demo_config.num_tokens,
+            num_tokens=args.num_tokens_m * 1_000_000,
             random_seeds=demo_config.random_seeds,
             dictionary_widths=args.dictionary_widths or demo_config.dictionary_widths,
             learning_rates=demo_config.learning_rates,

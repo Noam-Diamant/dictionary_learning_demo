@@ -58,10 +58,6 @@ class SparsityPenalties:
     gated: list[float]
 
 
-num_tokens = 500_000_000
-
-print(f"NOTE: Training on {num_tokens} tokens")
-
 eval_num_inputs = 200
 random_seeds = [0]
 dictionary_widths = [2**14, 2**16]
@@ -73,7 +69,9 @@ DECAY_START_FRACTION = 0.8
 
 learning_rates = [3e-4]
 
-wandb_project = "qwen-32b-sweep"
+def get_wandb_project(model_name: str) -> str:
+    # Generate wandb project name from model name.
+    return f"{model_name.replace('/', '-')}"
 
 LLM_CONFIG = {
     "EleutherAI/pythia-70m-deduped": LLMConfig(
@@ -87,6 +85,9 @@ LLM_CONFIG = {
     ),
     "Qwen/Qwen2.5-Coder-32B-Instruct": LLMConfig(
         llm_batch_size=4, context_length=2048, sae_batch_size=2048, dtype=t.bfloat16
+    ),
+    "gpt2-xl": LLMConfig(
+        llm_batch_size=4, context_length=1024, sae_batch_size=2048, dtype=t.bfloat16
     ),
 }
 
