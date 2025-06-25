@@ -331,7 +331,20 @@ if __name__ == "__main__":
     hf_repo_id = args.hf_repo_id
 
     if hf_repo_id:
-        assert huggingface_hub.repo_exists(repo_id=hf_repo_id, repo_type="model")
+        try:
+            if not huggingface_hub.repo_exists(repo_id=hf_repo_id, repo_type="model"):
+                print(f"Repository {hf_repo_id} does not exist. Creating it...")
+                huggingface_hub.create_repo(
+                    repo_id=hf_repo_id,
+                    repo_type="model",
+                    private=False,
+                    exist_ok=True
+                )
+                print(f"Created repository {hf_repo_id}")
+        except Exception as e:
+            print(f"Error with HuggingFace repository: {e}")
+            print("Make sure you are logged in to HuggingFace (`huggingface-cli login`)")
+            exit(1)
 
     # This prevents random CUDA out of memory errors
     os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
@@ -347,7 +360,7 @@ if __name__ == "__main__":
     start_time = time.time()
 
     save_dir = (
-        f"{args.save_dir}_{args.model_name}_{'_'.join(args.architectures)}".replace(
+        f"{args.save_dir}_{args.model_name}_{'_'.join(args.architectures)}_tokens{args.num_tokens_m}M".replace(
             "/", "_"
         )
     )

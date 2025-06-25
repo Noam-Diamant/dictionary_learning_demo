@@ -87,7 +87,7 @@ LLM_CONFIG = {
         llm_batch_size=4, context_length=2048, sae_batch_size=2048, dtype=t.bfloat16
     ),
     "gpt2-xl": LLMConfig(
-        llm_batch_size=4, context_length=1024, sae_batch_size=2048, dtype=t.bfloat16
+        llm_batch_size=4, context_length=1024, sae_batch_size=2048, dtype=t.float32
     ),
 }
 
