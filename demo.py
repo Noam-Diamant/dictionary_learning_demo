@@ -133,8 +133,8 @@ def run_sae_training(
     model = utils.truncate_model(model, layer)
 
     tokenizer = AutoTokenizer.from_pretrained(model_name)
-    submodule = utils.get_submodule(model, layer)
-    submodule_name = f"resid_post_layer_{layer}"
+    submodule = model.transformer.h[layer].mlp.c_proj if model.config.architectures[0] == "GPT2LMHeadModel" else utils.get_submodule(model, layer)
+    submodule_name = f"mlp_out_layer_{layer}"
     io = "out"
     activation_dim = model.config.hidden_size
 
