@@ -48,6 +48,8 @@ class LLMConfig:
     context_length: int
     sae_batch_size: int
     dtype: t.dtype
+    use_safetensors: bool = True
+    trust_remote_code: bool = True
 
 
 @dataclass
@@ -75,19 +77,40 @@ def get_wandb_project(model_name: str) -> str:
 
 LLM_CONFIG = {
     "EleutherAI/pythia-70m-deduped": LLMConfig(
-        llm_batch_size=64, context_length=1024, sae_batch_size=2048, dtype=t.float32
+        llm_batch_size=64, context_length=1024, sae_batch_size=2048, dtype=t.float32,
+        use_safetensors=True, trust_remote_code=True
     ),
     "EleutherAI/pythia-160m-deduped": LLMConfig(
-        llm_batch_size=32, context_length=1024, sae_batch_size=2048, dtype=t.float32
+        llm_batch_size=32, context_length=1024, sae_batch_size=2048, dtype=t.float32,
+        use_safetensors=True, trust_remote_code=True
     ),
     "google/gemma-2-2b": LLMConfig(
-        llm_batch_size=4, context_length=1024, sae_batch_size=2048, dtype=t.bfloat16
+        llm_batch_size=4, context_length=1024, sae_batch_size=2048, dtype=t.bfloat16,
+        use_safetensors=True, trust_remote_code=True
+    ),
+    "Qwen/Qwen2.5-0.5B": LLMConfig(
+        llm_batch_size=32, context_length=1024, sae_batch_size=2048, dtype=t.float32,
+        use_safetensors=True, trust_remote_code=True
+    ),
+    "Qwen/Qwen3-0.6B": LLMConfig(
+        llm_batch_size=32, context_length=1024, sae_batch_size=2048, dtype=t.float32,
+        use_safetensors=True, trust_remote_code=True
     ),
     "Qwen/Qwen2.5-Coder-32B-Instruct": LLMConfig(
-        llm_batch_size=4, context_length=2048, sae_batch_size=2048, dtype=t.bfloat16
+        llm_batch_size=4, context_length=2048, sae_batch_size=2048, dtype=t.bfloat16,
+        use_safetensors=True, trust_remote_code=True
     ),
     "gpt2-xl": LLMConfig(
-        llm_batch_size=4, context_length=1024, sae_batch_size=2048, dtype=t.float32
+        llm_batch_size=4, context_length=1024, sae_batch_size=2048, dtype=t.float32,
+        use_safetensors=True, trust_remote_code=True
+    ),
+    "EleutherAI/gpt-j-6b": LLMConfig(
+        llm_batch_size=2, context_length=2048, sae_batch_size=2048, dtype=t.bfloat16,
+        use_safetensors=True, trust_remote_code=True
+    ),
+    "unsloth/llama-3-8b": LLMConfig(
+        llm_batch_size=4, context_length=8192, sae_batch_size=2048, dtype=t.bfloat16,
+        use_safetensors=True, trust_remote_code=True
     ),
 }
 

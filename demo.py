@@ -126,8 +126,13 @@ def run_sae_training(
     else:
         save_steps = None
 
+    llm_config = demo_config.LLM_CONFIG[model_name]
     model = AutoModelForCausalLM.from_pretrained(
-        model_name, device_map="auto", torch_dtype=dtype
+        model_name, 
+        device_map="auto", 
+        torch_dtype=dtype,
+        use_safetensors=llm_config.use_safetensors,
+        trust_remote_code=llm_config.trust_remote_code
     )
 
     model = utils.truncate_model(model, layer)
